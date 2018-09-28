@@ -131,10 +131,10 @@ class SignIn extends Component {
                 <Button type="primary"  onClick={this.handleLogin}>
                   Login
                 </Button>
-              <Link to="/Bsigup">
+            </div>
+              <Link to="/Bsignup">
                SignUp as Borrower/Lender
               </Link>
-            </div>
             </div>
           </Scrollbars>
         </div>
