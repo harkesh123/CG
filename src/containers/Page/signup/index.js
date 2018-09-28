@@ -131,7 +131,6 @@ class SignUp extends Component {
     var status=false;
     userPool.signUp(this.state.email, this.state.Password, attributeList, null, function(err, result){
         if (err) {
-            console.log("bugger",err)
             alert( err.message || JSON.stringify(err));
             return;
         }
@@ -181,7 +180,7 @@ handlecode=()=>{
         }
         alert('call result: ' + result);
 
-        window.location.replace("/signin")
+        window.location.replace("/dashboard")
     });
 }
 
@@ -271,16 +270,6 @@ handlecode=()=>{
                   <IntlMessages id="page.signUpTermsConditions" />
                 </span>
               </div>
-              <div className="mateInputWrapper">
-                <TextField
-                  label="Phone number"
-                  placeholder="Phone number"
-                  margin="normal"
-                  type="number"
-                  onChange={this.onChangephone}      
-                />
-                <span>{this.state.Mphone}</span>
-              </div>
               <div className="mateLoginSubmit">
                 <Button type="primary" onClick={this.handleLogin}>
                   Sign Up
@@ -294,11 +283,25 @@ handlecode=()=>{
   }
   else{
     return(
-      <div className="mateSignInPageForm">
-       <div className="mateInputWrapper">
+ <SignUpStyleWrapper className="mateSignUpPage">
+        <div className="mateSignInPageImgPart">
+          <div className="mateSignInPageImg">
+            <img src={signinImg} alt="Kiwi standing on oval" />
+          </div>
+        </div>
+
+        <div className="mateSignInPageContent">
+          <Scrollbars style={{ height: "100%" }}>
+            <div className="mateSignInPageGreet">
+              <h1>Verification</h1>
+              <p>
+              </p>
+            </div>
+            <div>
+            <div className="mateInputWrapper">
                 <TextField
-                  label="Phone number"
-                  placeholder="Phone number"
+                  label="Verification no."
+                  placeholder="number"
                   margin="normal"
                   onChange={this.onCode}      
                 />
@@ -307,14 +310,18 @@ handlecode=()=>{
                 <Button type="primary" onClick={this.handlecode}>
                   Verify
                 </Button>
-
-                <Link to={'/signin'}>
+              <div className="mateLoginSubmit">
+                <Link to="/dashboard">
                 <Button type="primary" >
-                  skip
+                  Skip
                 </Button>
                 </Link>
+                </div>
               </div>
-              </div>
+            </div>
+          </Scrollbars>
+        </div>
+      </SignUpStyleWrapper>
       );
   }
   }

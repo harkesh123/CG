@@ -65,7 +65,7 @@ const LogoElem = ({ onLogo }) => {
   return (
     <Link to="/dashboard" onClick={onLogo}>
       {/* <img src={Logo} alt="Logo" /> */}
-      Mate admin
+      CG ADMIN  
     </Link>
   );
 };
@@ -114,7 +114,7 @@ class Sidebar extends Component {
         }
       };
       return (
-        <div key={key}>
+        <div key={key}  >
           {children && !isNavTab ? (
             <ListItem
               button

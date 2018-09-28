@@ -56,13 +56,13 @@ class SignIn extends Component {
             //POTENTIAL: Region needs to be set if not already set previously elsewhere.
             AWS.config.region = 'us-east-2';
 
-            AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-                IdentityPoolId : 'us-east-2_NSZXuZPqY', // your identity pool id here
-                Logins : {
-                    // Change the key below according to the specific region your user pool is in.
-                    'cognito-idp.us-east-2.amazonaws.com/us-east-2_NSZXuZPqY' : result.getIdToken().getJwtToken()
-                }
-            });
+            // AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+            //     IdentityPoolId : 'us-east-2_NSZXuZPqY', // your identity pool id here
+            //     Logins : {
+            //         // Change the key below according to the specific region your user pool is in.
+            //         'cognito-idp.us-east-2.amazonaws.com/us-east-2_NSZXuZPqY' : result.getIdToken().getJwtToken()
+            //     }
+            // });
             console.log(AWS.config.credentials)
             //refreshes credentials using AWS.CognitoIdentity.getCredentialsForIdentity()
             AWS.config.credentials.refresh((error) => {
@@ -104,7 +104,7 @@ class SignIn extends Component {
             <div className="mateSignInPageGreet">
               <h1>Hello </h1>
               <p>
-                Welcome to Mate Admin
+                Welcome 
               </p>
             </div>
             <div className="mateSignInPageForm">
