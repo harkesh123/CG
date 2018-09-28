@@ -23,7 +23,7 @@ let selectedTheme = {};
 
 const ListLabel = ({ label }) => (
   <ListItemText
-    style={{ color: selectedTheme.textColor }}
+    style={{ color: "white" }}
     inset
     primary={<IntlMessages id={label} />}
   />
@@ -39,18 +39,18 @@ const ListElement = ({
   return (
     <div className="ListItemWrapper">
       {leftIcon ? (
-        <ListItemIcon style={{ color: selectedTheme.textColor }}>
+        <ListItemIcon style={{ color: "#662d91" }}>
           {leftIcon}
         </ListItemIcon>
       ) : null}
       <ListLabel label={label} />
       {children && !isNavTab ? (
         optionCollapsed ? (
-          <ExpandLessIcon style={{ color: selectedTheme.textColor }}>
+          <ExpandLessIcon style={{ color: "#662d91" }}>
             expand_less
           </ExpandLessIcon>
         ) : (
-          <ExpandMoreIcon style={{ color: selectedTheme.textColor }}>
+          <ExpandMoreIcon style={{ color:  "#662d91" }}>
             expand_more
           </ExpandMoreIcon>
         )
@@ -166,7 +166,7 @@ class Sidebar extends Component {
       >
         <div
           className="drawerInner"
-          style={{ background: customizedTheme.backgroundColor }}
+          style={{ background:  "#662d91" }}
         >
           <LogoWrapper>
             <LogoElem onLogo={this.onLogo} />

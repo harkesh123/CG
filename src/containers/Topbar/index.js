@@ -23,7 +23,7 @@ class Topbar extends Component {
     } = this.props;
     const propsTopbar = { locale, url };
     return (
-      <AppHolder style={{ background: customizedTheme.backgroundColor }}>
+      <AppHolder style={{ background: "#662d91" }}>
         <Toolbar
           style={{
             paddingLeft: "30px",

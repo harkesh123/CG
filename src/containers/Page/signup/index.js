@@ -179,7 +179,7 @@ handlecode=()=>{
             return;
         }
         alert('call result: ' + result);
-
+       
         window.location.replace("/dashboard")
     });
 }
