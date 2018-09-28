@@ -6,7 +6,6 @@ import actions from './actions';
 const fakeApiCall = true; // auth0 or express JWT
 
 export function* loginRequest() {
-  console.log("pressed")
   if (fakeApiCall) {
     yield put({
       type: actions.LOGIN_SUCCESS,

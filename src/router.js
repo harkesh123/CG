@@ -3,7 +3,7 @@ import { Route, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
 // import Transition from './components/utility/transitionSwitch';
-import App from "./containers/App";
+import App from "./containers/App2";
 import asyncComponent from "./helpers/AsyncFunc";
 import Auth0 from "./helpers/auth0";
 
@@ -55,6 +55,7 @@ const PublicRoutes = ({ history, isLoggedIn }) => (
         path="/404"
         component={asyncComponent(() => import("./containers/Page/404"))}
       />
+      
       <Route
         exact
         path="/505"

@@ -56,7 +56,7 @@ class TopbarUser extends Component {
 
           <div className="userDetails">
             <h3>John Doe</h3>
-            <p>Sr. Marketing Officer</p>
+            <p></p>
           </div>
         </UserInformation>
 

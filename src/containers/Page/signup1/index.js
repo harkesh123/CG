@@ -9,7 +9,7 @@ import authAction from "../../../redux/auth/actions";
 import IntlMessages from "../../../components/utility/intlMessages";
 import SignUpStyleWrapper from "./signup.style";
 import { Checkbox } from "./signup.style";
-
+import { CognitoUserPool, CognitoUserAttribute, CognitoUser } from 'amazon-cognito-identity-js';
 const { login } = authAction;
 
 class SignUp extends Component {
@@ -18,7 +18,8 @@ class SignUp extends Component {
       Mpass:"",
       Memail:"",
       Mvpass:"",
-      Mphone:""
+      Mphone:"",
+      Verify:false
   };
   componentWillReceiveProps(nextProps) {
     if (
@@ -28,7 +29,8 @@ class SignUp extends Component {
       this.setState({ redirectToReferrer: true });
     }
   }
-  handleLogin = () => {
+   
+   handleLogin = () => {
     const { login } = this.props;
     login();
     let sub=false;
@@ -47,15 +49,19 @@ class SignUp extends Component {
     }
     if(!Mphone&&!Mvpass&&!Mpass&&!Memail&&sub){
       console.log("yes")
+      this.Reg();
+
     }
     else{
       console.log("no")
     }
     //this.props.history.push("/dashboard");
   };
+
+
   onChangeUsername = event => this.setState({ username: event.target.value });
   onChangeEmail = event => {
-    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    var re = /^(([^<>()\]\\.,;:\s@"]+(\.[^<>()\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if(!re.test(String(event.target.value).toLowerCase())){
       this.setState({Memail:"enter a valid Email-Id"})
     }
@@ -85,16 +91,102 @@ class SignUp extends Component {
   
   onChangephone = event => {
   if(event.target.value.length===10){
-        console.log(event.target.value.length)
+        
         this.setState({Mphone:""})
       }
   else{
         this.setState({Mphone:"enter valid no."})
       }
-    
-    this.setState({ Phone: event.target.value });
+     let va="+91"+event.target.value
+    this.setState({ Phone: va });
   }
+  
+  Reg=()=>{
+  const poolData={
+    UserPoolId:"us-east-2_qkZPgwHk8",
+    ClientId:"27mdf4pe13ciqu6a0qov4vai91"
+  } 
+
+  var userPool = new CognitoUserPool(poolData);
+  var attributeList = []; 
+  var dataEmail = {
+        Name : 'email',
+        Value : this.state.email
+    };
+  var dataPhone = {
+        Name : 'phone_number',
+        Value : this.state.Phone
+    };
+  var dataProfile ={
+    Name:"profile",
+    Value:"Lender"
+  }  
+    var attributeEmail = new CognitoUserAttribute(dataEmail);
+    var attributePhone = new CognitoUserAttribute(dataPhone);
+    var attributeProfile = new CognitoUserAttribute(dataProfile);
+    var Regdata:CognitoUser
+    attributeList.push(attributeEmail);
+    attributeList.push(attributePhone);
+    attributeList.push(attributeProfile);
+    var status=false;
+    userPool.signUp(this.state.email, this.state.Password, attributeList, null, function(err, result){
+        if (err) {
+            console.log("bugger",err)
+            alert( err.message || JSON.stringify(err));
+            return;
+        }
+        status=true;
+        alert("SignUp Successfull")
+        Regdata = result.user;
+        console.log('user name is ' + Regdata.getUsername());
+        yes();
+    });
+    const yes=()=>{
+      this.setState({Verify:true})
+    }
+  // var userData = {
+  //       Username : 'harkesh',
+  //       Pool : userPool
+  //   };
+
+  //   var cognitoUser = CognitoUser(userData);
+  //   cognitoUser.confirmRegistration('543181', true, function(err, result) {
+  //       if (err) {
+  //           alert(err.message || JSON.stringify(err));
+  //           return;
+  //       }
+  //       console.log('call result: ' + result);
+  //   });
+
+  }
+  onCode=(event)=>{
+    this.setState({code:event.target.value})
+  }
+handlecode=()=>{
+   const poolData={
+    UserPoolId:"us-east-2_qkZPgwHk8",
+    ClientId:"27mdf4pe13ciqu6a0qov4vai91"
+  } 
+    var userPool = new CognitoUserPool(poolData);
+    var userData = {
+        Username : this.state.email,
+        Pool : userPool
+    };
+
+    var cognitoUser = new CognitoUser(userData);
+    cognitoUser.confirmRegistration(this.state.code, true, function(err, result) {
+        if (err) {
+            alert(err.message || JSON.stringify(err));
+            return;
+        }
+        alert('call result: ' + result);
+        
+        window.location.replace("/signin")
+    });
+}
+
   render() {
+    if(!this.state.Verify){
     return (
       <SignUpStyleWrapper className="mateSignUpPage">
         <div className="mateSignInPageImgPart">
@@ -119,9 +211,9 @@ class SignUp extends Component {
 
           <Scrollbars style={{ height: "100%" }}>
             <div className="mateSignInPageGreet">
-              <h1>Welcome lender</h1>
+              <h1>Welcome Lender</h1>
               <p>
-                Its Free, Join Us.
+                
               </p>
             </div>
             <div className="mateSignInPageForm">
@@ -168,7 +260,6 @@ class SignUp extends Component {
                   label="Phone number"
                   placeholder="Phone number"
                   margin="normal"
-                  type="number"
                   onChange={this.onChangephone}      
                 />
                 <span>{this.state.Mphone}</span>
@@ -181,6 +272,16 @@ class SignUp extends Component {
                   <IntlMessages id="page.signUpTermsConditions" />
                 </span>
               </div>
+              <div className="mateInputWrapper">
+                <TextField
+                  label="Phone number"
+                  placeholder="Phone number"
+                  margin="normal"
+                  type="number"
+                  onChange={this.onChangephone}      
+                />
+                <span>{this.state.Mphone}</span>
+              </div>
               <div className="mateLoginSubmit">
                 <Button type="primary" onClick={this.handleLogin}>
                   Sign Up
@@ -191,6 +292,32 @@ class SignUp extends Component {
         </div>
       </SignUpStyleWrapper>
     );
+  }
+  else{
+    return(
+      <div className="mateSignInPageForm">
+       <div className="mateInputWrapper">
+                <TextField
+                  label="Phone number"
+                  placeholder="Phone number"
+                  margin="normal"
+                  onChange={this.onCode}      
+                />
+              </div>
+              <div className="mateLoginSubmit">
+                <Button type="primary" onClick={this.handlecode}>
+                  Verify
+                </Button>
+                <Link to={'/signin'}>
+                <Button type="primary" >
+                  skip
+                </Button>
+                </Link>
+
+              </div>
+              </div>
+      );
+  }
   }
 }
 
